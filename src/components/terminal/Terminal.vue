@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, toRefs } from "vue";
+import { computed, onMounted, ref, toRefs } from "vue";
 import { DEFAULT_USER } from "../../commands/user/constant";
 import { UserType } from "../../commands/user/user";
 import {
@@ -11,6 +11,7 @@ import {
   ComponentOutputType,
   TerminalType
 } from "./terminal";
+import useHistory from "./history";
 
 /**
  * 可以类比为一个指针，指向当前正在执行的命令，可通过这个“指针”来添加输出结果
@@ -60,8 +61,23 @@ const isRunning = ref(false);
 const commandList = ref<CommandOutputType[]>([]);
 
 /**
+ * 输入命令
+ */
+const inputCommand = ref<CommandInputType>({
+  text: "",
+  placeholder: ""
+});
+const inputRef = ref();
+
+/**
  * TODO 历史记录 history
  */
+const {
+  commandHistoryPos,
+  historyCommandList: listCommandHistory,
+  showPrevCommand,
+  showNextCommand
+} = useHistory(commandList.value, inputCommand);
 
 /**
  * TODO 提示 hint
@@ -71,15 +87,6 @@ const commandList = ref<CommandOutputType[]>([]);
  * 输出列表，用于渲染已经执行命令的结果
  */
 const outputList = ref<OutputType[]>([]);
-
-/**
- * 输入命令
- */
-const inputCommand = ref<CommandInputType>({
-  text: "",
-  placeholder: ""
-});
-const inputRef = ref();
 
 /**
  * 点击终端时将光标聚焦于输入框
@@ -116,8 +123,7 @@ const doSubmitCommand = async () => {
   // 输入不为空，则加入commandList，用于设置历史记录等
   if (inputText) {
     commandList.value.push(currentCommand);
-    writeSuccessTextToResult("这是一条测试数据");
-    // TODO 设置历史记录
+    commandHistoryPos.value = commandList.value.length;
   }
   inputCommand.value = {
     text: "",
@@ -202,28 +208,13 @@ const isFocusInput = ref<boolean>(false);
  * 判断光标是否聚焦于输入框
  */
 const isInputFocused = (): boolean => {
-  return isFocusInput.value;
+  return (inputRef.value.input as HTMLInputElement) == document.activeElement;
 };
 
 /**
  * TODO 按tab键补全命令
  */
 const setTabCompletion = () => {};
-
-/**
- * TODO 查看下一条命令
- */
-const showNextCommand = () => {};
-
-/**
- * TODO 查看上一条命令
- */
-const showPrevCommand = () => {};
-
-/**
- * TODO 查看历史命令
- */
-const listCommandHistory = (): CommandOutputType[] => {};
 
 /**
  * 折叠 / 展开所有块
@@ -257,6 +248,18 @@ const terminal: TerminalType = {
 
 defineExpose({
   terminal
+});
+
+onMounted(() => {
+  document.onkeydown = (e: KeyboardEvent) => {
+    // e.preventDefault();
+    if (e.key === "ArrowUp") {
+      terminal.showPrevCommand();
+    } else if (e.key === "ArrowDown") {
+      terminal.showNextCommand();
+    }
+    focusOnInput();
+  };
 });
 </script>
 
@@ -304,16 +307,6 @@ defineExpose({
           autofocus
           :bordered="false"
           @press-enter="doSubmitCommand"
-          @focus="
-            () => {
-              isFocusInput = true;
-            }
-          "
-          @blur="
-            () => {
-              isFocusInput = false;
-            }
-          "
         >
           <template #addonBefore>
             <span class="command-input-prompt">{{ prompt }}</span>
