@@ -129,6 +129,9 @@ const doSubmitCommand = async () => {
     text: "",
     placeholder: ""
   };
+  setTimeout(() => {
+    terminalRef.value.scrollTop = terminalRef.value.scrollHeight;
+  }, 50);
   isRunning.value = false;
 };
 
@@ -265,7 +268,7 @@ onMounted(() => {
 
 <template>
   <div class="terminal-wrapper" @click="handleClickOnTerminal">
-    <div class="terminal">
+    <div class="terminal" ref="terminalRef">
       <!-- 命令执行结果（可折叠显示） -->
       <div class="collapse-wrapper">
         <a-collapse
@@ -315,19 +318,22 @@ onMounted(() => {
       </div>
       <!-- 提示 -->
       <div class="hint"></div>
+      <div style="margin-bottom: 16px" />
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .terminal-wrapper {
-  padding: 20px;
-  overflow: scroll;
-  width: 100wh;
+  position: fixed;
+  inset: 0px;
   background: black;
-  min-height: 100vh;
 
   .terminal {
+    position: fixed;
+    inset: 0px;
+    padding: 20px;
+    overflow: scroll;
     background: rgba(0, 0, 0, 0.5);
   }
 
