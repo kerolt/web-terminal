@@ -12,6 +12,7 @@ import {
   TerminalType
 } from "./terminal";
 import useHistory from "./history";
+import { registerShortcuts } from "./shortcut";
 
 /**
  * 可以类比为一个指针，指向当前正在执行的命令，可通过这个“指针”来添加输出结果
@@ -93,7 +94,7 @@ const outputList = ref<OutputType[]>([]);
  * @param e
  */
 const handleClickOnTerminal = (e: Event) => {
-  if ((e.target as HTMLElement).className === "terminal-wrapper") {
+  if ((e.target as HTMLElement).className === "terminal") {
     focusOnInput();
   }
 };
@@ -254,15 +255,7 @@ defineExpose({
 });
 
 onMounted(() => {
-  document.onkeydown = (e: KeyboardEvent) => {
-    // e.preventDefault();
-    if (e.key === "ArrowUp") {
-      terminal.showPrevCommand();
-    } else if (e.key === "ArrowDown") {
-      terminal.showNextCommand();
-    }
-    focusOnInput();
-  };
+  registerShortcuts(terminal);
 });
 </script>
 
