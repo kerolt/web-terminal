@@ -1,7 +1,7 @@
 /**
- * 输出状态，要么成功，要么失败
+ * 输出状态，成功，失败，警告
  */
-export type OutputStatusType = "success" | "error";
+export type OutputStatusType = "success" | "error" | "warning";
 
 /**
  * 输出类型
@@ -16,6 +16,7 @@ export interface OutputType {
   status?: OutputStatusType;
   props?: any;
   collapsible?: boolean;
+  component?: any;
 }
 
 /**

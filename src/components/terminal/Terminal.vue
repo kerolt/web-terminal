@@ -13,6 +13,7 @@ import {
 } from "./terminal";
 import useHistory from "./history";
 import { registerShortcuts } from "./shortcut";
+import OutputContent from "./OutputContent.vue";
 
 /**
  * 可以类比为一个指针，指向当前正在执行的命令，可通过这个“指针”来添加输出结果
@@ -282,14 +283,16 @@ onMounted(() => {
                 <span class="prompt">{{ prompt }}</span>
                 <span>{{ output.text }}</span>
               </template>
-              <!-- TODO <ContentOutput></ContentOutput> component -->
-              <div>{{ output }}</div>
+              <div v-for="(result, index) in output.resultList" :key="index">
+                <OutputContent :output="result"></OutputContent>
+              </div>
             </a-collapse-panel>
             <!-- 不折叠内容 -->
             <template v-else>
               <!-- 如果输出结果的type不为command，则可能是初始化页面时的版本、版权、提示等信息 -->
-              <!-- TODO <ContentOutput :output="output"></ContentOutput> component -->
-              <div style="color: aquamarine">{{ output }}</div>
+              <div class="terminal-row">
+                <OutputContent :output="output"></OutputContent>
+              </div>
             </template>
           </template>
         </a-collapse>
@@ -343,9 +346,11 @@ onMounted(() => {
     .terminal-row {
       font-size: 18px !important;
       font-family: courier-new, courier, monospace;
+      color: white;
+      padding: 5px 15px;
 
       ::v-deep(.ant-collapse-header) {
-        padding: 5px 15px;
+        padding: 5px 0;
       }
 
       ::v-deep(.ant-collapse-header-text) {
@@ -354,7 +359,7 @@ onMounted(() => {
 
       ::v-deep(.ant-collapse-content-box) {
         color: white;
-        padding: 5px 15px;
+        padding: 5px 0;
       }
     }
   }
