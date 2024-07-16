@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue";
 import Terminal from "@/components/terminal/Terminal.vue";
 import { TerminalType } from "../components/terminal/terminal";
+import { executeCommand } from "../commands/executor";
 
 const terminalRef = ref();
 
@@ -13,9 +14,8 @@ onMounted(() => {
 });
 
 const doSubmitCommand = (inputText: string) => {
-  // alert(inputText);
   const terminal: TerminalType = terminalRef.value.terminal;
-  terminal.writeSuccessTextToResult("hello");
+  executeCommand(inputText, terminal);
 };
 </script>
 

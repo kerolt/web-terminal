@@ -8,6 +8,9 @@ dependencies:
   ant-design-vue:
     specifier: 4.x
     version: 4.2.3(vue@3.4.31)
+  getopts:
+    specifier: ^2.3.0
+    version: 2.3.0
   pinia:
     specifier: ^2.1.7
     version: 2.1.7(typescript@5.4.5)(vue@3.4.31)
@@ -1417,6 +1420,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /getopts@2.3.0:
+    resolution: {integrity: sha512-5eDf9fuSXwxBL6q5HX+dhDj+dslFGWzU5thZ9kNKUkcPtaPdatmUFKwHFrLb/uf/WpA4BHET+AX3Scl56cAjpA==}
+    dev: false
 
   /glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
