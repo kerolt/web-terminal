@@ -2,6 +2,7 @@ import getopts, { ParsedOptions, Options } from "getopts";
 import { TerminalType } from "../components/terminal/terminal";
 import { CommandOptionType, CommandType } from "./command";
 import { commandMap } from "./register";
+import helpCommand from "./terminal/help/help-cmd";
 
 /**
  * 命令执行器
@@ -102,6 +103,10 @@ async function doAction(
   terminal: TerminalType,
   parentCommand?: CommandType
 ) {
-  // TODO 当有“--help”时，应该用help命令提示当前命令的信息
+  const { help } = options;
+  if (help) {
+    helpCommand.action({ ...options, _: [command.cmd] }, terminal, parentCommand);
+    return;
+  }
   await command.action(options, terminal);
 }
