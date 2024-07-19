@@ -344,8 +344,6 @@ onMounted(() => {
 
   .collapse-wrapper {
     .terminal-row {
-      font-size: 18px !important;
-      font-family: courier-new, courier, monospace;
       color: white;
       padding: 5px 15px;
 
@@ -366,15 +364,10 @@ onMounted(() => {
 
   .command-input {
     color: white;
-    font-size: 18px;
-    font-family: courier-new, courier, monospace;
 
     :deep(input) {
       color: white !important;
-      font-size: 18px;
       padding: 0 10px;
-      font-size: 18px;
-      font-family: courier-new, courier, monospace;
     }
 
     :deep(.ant-input) {
@@ -392,8 +385,6 @@ onMounted(() => {
       user-select: none;
       color: white;
       background: transparent;
-      font-size: 18px;
-      font-family: courier-new, courier, monospace;
     }
   }
 }

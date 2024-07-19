@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import { OutputType } from "./terminal";
 
 const props = defineProps<{ output: OutputType }>();
@@ -42,7 +42,6 @@ const tagColor = computed((): string => {
   border-radius: 0;
   font-size: 16px;
   border: none;
-  font-family: courier-new, courier, monospace;
   padding-top: 3px;
   padding-bottom: 3px;
 }

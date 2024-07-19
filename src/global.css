@@ -1,0 +1,6 @@
+@import "ant-design-vue/dist/reset.css";
+
+* {
+  font-size: 18px !important;
+  font-family: courier-new, courier, monospace !important;
+}
