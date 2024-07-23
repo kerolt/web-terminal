@@ -14,6 +14,22 @@ import {
 import useHistory from "./history";
 import { registerShortcuts } from "./shortcut";
 import OutputContent from "./OutputContent.vue";
+import { useConfigStore } from "../../stores/terminal-config";
+
+const configStore = useConfigStore();
+
+const wrapperStyle = computed(() => {
+  const { background } = configStore;
+  const style = {
+    background
+  };
+  if (background.startsWith("http")) {
+    style.background = `url(${background})`;
+  } else {
+    style.background = background;
+  }
+  return style;
+});
 
 /**
  * 可以类比为一个指针，指向当前正在执行的命令，可通过这个“指针”来添加输出结果
@@ -261,7 +277,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="terminal-wrapper" @click="handleClickOnTerminal">
+  <div class="terminal-wrapper" @click="handleClickOnTerminal" :style="wrapperStyle">
     <div class="terminal" ref="terminalRef">
       <!-- 命令执行结果（可折叠显示） -->
       <div class="collapse-wrapper">
