@@ -6,6 +6,7 @@ const shortcutCommand: CommandType = {
   name: "快捷键",
   desc: "查看快捷键",
   options: [],
+  collapsible: true,
   action: (options, terminal) => {
     terminal.writeTextToResult("快捷键");
     const shortcuts = shortcutList;

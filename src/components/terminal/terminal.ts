@@ -84,5 +84,5 @@ export interface TerminalType {
   // 折叠 / 展开所有块
   toggleAllCollapse: () => void;
   // 设置命令是否可折叠
-  // setCommandCollapsible: (collapsible: boolean) => void;
+  setCommandCollapsible: (collapsible: boolean) => void;
 }

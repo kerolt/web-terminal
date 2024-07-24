@@ -24,10 +24,10 @@ const tagColor = computed((): string => {
 <template>
   <div class="output-content">
     <!-- 文本输出 -->
-    <template v-if="output.type === 'text'">
+    <div v-if="output.type === 'text'" style="margin-left: 3px">
       <a-tag v-if="tagColor" :color="tagColor">{{ output.status }}</a-tag>
-      <span v-html="output.text"></span>
-    </template>
+      <span v-if="output.type === 'text'" v-html="output.text"></span>
+    </div>
     <!-- 组件输出 -->
     <component
       v-if="output.type === 'component'"

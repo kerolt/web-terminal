@@ -93,7 +93,6 @@ function parse(text: string, commandOptions: CommandOptionType[]): ParsedOptions
   });
 
   const parseOptions = getopts(args, options);
-  console.log(parseOptions);
   return parseOptions;
 }
 
@@ -104,6 +103,10 @@ async function doAction(
   parentCommand?: CommandType
 ) {
   const { help } = options;
+  // 设置输出可折叠
+  if (command.collapsible || help) {
+    terminal.setCommandCollapsible(true);
+  }
   if (help) {
     helpCommand.action({ ...options, _: [command.cmd] }, terminal, parentCommand);
     return;

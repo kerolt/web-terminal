@@ -250,6 +250,10 @@ const toggleAllCollapse = () => {
   }
 };
 
+const setCommandCollapsible = (collapsible: boolean) => {
+  currentCommandPtr.collapsible = collapsible;
+};
+
 const terminal: TerminalType = {
   doSubmitCommand,
   clear,
@@ -264,7 +268,8 @@ const terminal: TerminalType = {
   showNextCommand,
   showPrevCommand,
   listCommandHistory,
-  toggleAllCollapse
+  toggleAllCollapse,
+  setCommandCollapsible
 };
 
 defineExpose({
@@ -288,9 +293,9 @@ onMounted(() => {
           ghost
         >
           <template v-for="(output, index) in outputList" :key="index">
-            <!-- 折叠内容，一般是内容比较多 -->
+            <!-- 折叠内容，一般都是command -->
             <a-collapse-panel
-              v-if="output.type === 'command'"
+              v-if="output.collapsible"
               :key="index"
               class="terminal-row"
               :show-arrow="false"
@@ -303,12 +308,26 @@ onMounted(() => {
                 <OutputContent :output="result"></OutputContent>
               </div>
             </a-collapse-panel>
-            <!-- 不折叠内容 -->
+            <!-- 不折叠内容，直接输出结果 -->
             <template v-else>
+              <!-- 如果type为command，例如bg命令，不会有输出结果，不必要加上可折叠效果 -->
+              <template v-if="output.type === 'command'">
+                <div class="terminal-row">
+                  <div style="margin-bottom: 2px">
+                    <span class="prompt">{{ prompt }}</span>
+                    <span>{{ output.text }}</span>
+                  </div>
+                  <div v-for="(result, index) in output.resultList" :key="index">
+                    <OutputContent :output="result"></OutputContent>
+                  </div>
+                </div>
+              </template>
               <!-- 如果输出结果的type不为command，则可能是初始化页面时的版本、版权、提示等信息 -->
-              <div class="terminal-row">
-                <OutputContent :output="output"></OutputContent>
-              </div>
+              <template v-else>
+                <div class="terminal-row">
+                  <OutputContent :output="output"></OutputContent>
+                </div>
+              </template>
             </template>
           </template>
         </a-collapse>
@@ -374,6 +393,14 @@ onMounted(() => {
       ::v-deep(.ant-collapse-content-box) {
         color: white;
         padding: 5px 0;
+      }
+
+      :deep(.ant-collapse-header) {
+        padding: 0;
+      }
+
+      :deep(.ant-collapse-content-box) {
+        padding: 0;
       }
     }
   }

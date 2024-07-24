@@ -6,6 +6,7 @@ const historyCommand: CommandType = {
   alias: ["h"],
   desc: "查看历史记录",
   options: [],
+  collapsible: true,
   action: (options, terminal) => {
     const historys = terminal.listCommandHistory();
     historys.forEach((history, index) => {

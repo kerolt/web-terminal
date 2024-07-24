@@ -19,6 +19,8 @@ interface CommandType {
   params?: CommandParamsType[];
   // 子命令
   subCommandsMap?: Record<string, CommandType>;
+  // 执行命令结果是否可折叠
+  collapsible?: boolean;
   // 执行功能
   action: (options: ParsedOptions, terminal: TerminalType, parentCommand?: CommandType) => void;
 }
