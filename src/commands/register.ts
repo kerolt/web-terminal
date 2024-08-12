@@ -4,13 +4,15 @@ import clearCommand from "./terminal/clear-cmd";
 import helpCommand from "./terminal/help/help-cmd";
 import historyCommand from "./terminal/history-cmd";
 import shortcutCommand from "./terminal/shortcut-cmd";
+import todoCommand from "./todo/todo-cmd";
 
 const commandList: CommandType[] = [
   clearCommand,
   historyCommand,
   shortcutCommand,
   helpCommand,
-  backgroundCommand
+  backgroundCommand,
+  todoCommand
 ];
 
 const commandMap: Record<string, CommandType> = {};
