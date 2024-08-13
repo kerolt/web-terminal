@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, toRefs } from "vue";
+import { computed, onMounted, ref, toRefs, watchEffect } from "vue";
 import { DEFAULT_USER } from "../../commands/user/constant";
 import { UserType } from "../../commands/user/user";
 import {
@@ -15,6 +15,7 @@ import useHistory from "./history";
 import { registerShortcuts } from "./shortcut";
 import OutputContent from "./OutputContent.vue";
 import { useConfigStore } from "../../stores/terminal-config";
+import { useTab } from "./hint";
 
 const configStore = useConfigStore();
 
@@ -87,9 +88,6 @@ const inputCommand = ref<CommandInputType>({
 });
 const inputRef = ref();
 
-/**
- * TODO 历史记录 history
- */
 const {
   commandHistoryPos,
   historyCommandList: listCommandHistory,
@@ -121,7 +119,7 @@ const handleClickOnTerminal = (e: Event) => {
  */
 const doSubmitCommand = async () => {
   isRunning.value = true;
-  // TODO setHint("");
+  clearHintList();
 
   // 设置当前命令指针的指向
   let inputText = inputCommand.value.text;
@@ -152,10 +150,6 @@ const doSubmitCommand = async () => {
   }, 50);
   isRunning.value = false;
 };
-
-/**
- * TODO 输入框内容改变时，触发输入提示
- */
 
 /**
  * 清空输出
@@ -229,13 +223,29 @@ const isFocusInput = ref<boolean>(false);
  * 判断光标是否聚焦于输入框
  */
 const isInputFocused = (): boolean => {
-  return (inputRef.value.input as HTMLInputElement) == document.activeElement;
+  // return (inputRef.value.input as HTMLInputElement) == document.activeElement;
+  return isFocusInput.value;
 };
 
-/**
- * TODO 按tab键补全命令
- */
-const setTabCompletion = () => {};
+const { hintList, setInputComand, setHintList, clearHintList } = useTab();
+
+const setTabCompletion = () => {
+  if (hintList.value.length > 0) {
+    // hintList中长度 > 0时，按下tab使用第一个作为命令
+    setInputComand(inputCommand);
+  } else {
+    // hintList还没有内容时，按下tab会找到与input相匹配的命令
+    setHintList(inputCommand.value.text);
+  }
+};
+
+watchEffect(() => {
+  if (inputCommand.value.text.length === 0) {
+    clearHintList();
+  } else {
+    setHintList(inputCommand.value.text);
+  }
+});
 
 /**
  * 折叠 / 展开所有块
@@ -341,6 +351,16 @@ onMounted(() => {
           autofocus
           :bordered="false"
           @press-enter="doSubmitCommand"
+          @focus="
+            () => {
+              isFocusInput = true;
+            }
+          "
+          @blur="
+            () => {
+              isFocusInput = false;
+            }
+          "
         >
           <template #addonBefore>
             <span class="command-input-prompt">{{ prompt }}</span>
@@ -348,7 +368,14 @@ onMounted(() => {
         </a-input>
       </div>
       <!-- 提示 -->
-      <div class="hint"></div>
+      <div class="hint-container">
+        <div v-for="(hint, index) in hintList" :key="index">
+          <a-row :gutter="14">
+            <a-col :span="6">{{ hint.command }}</a-col>
+            <a-col :span="8">({{ hint.desc }})</a-col>
+          </a-row>
+        </div>
+      </div>
       <div style="margin-bottom: 16px" />
     </div>
   </div>
@@ -429,6 +456,11 @@ onMounted(() => {
       color: white;
       background: transparent;
     }
+  }
+
+  .hint-container {
+    color: #a8a7a7;
+    padding: 0 20px;
   }
 }
 </style>

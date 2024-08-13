@@ -86,3 +86,8 @@ export interface TerminalType {
   // 设置命令是否可折叠
   setCommandCollapsible: (collapsible: boolean) => void;
 }
+
+export interface HintType {
+  command: string;
+  desc: string;
+}
