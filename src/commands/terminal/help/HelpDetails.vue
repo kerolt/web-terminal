@@ -37,7 +37,7 @@ function getUsage(command: CommandType, parentCommand: CommandType): string {
 
   // 选项
   if (command.options && command.options.length > 0) {
-    usageStr += "[选项]";
+    usageStr += " [选项]";
   }
 
   return usageStr;
@@ -52,7 +52,7 @@ function getOptionItem(option: CommandOptionType): string[] {
   if (option.alias && option.alias.length > 0) {
     res.push("-" + option.alias[0]);
   }
-  res.push("--" + option.name);
+  res.push("--" + option.key);
   return res;
 }
 </script>
@@ -66,9 +66,9 @@ function getOptionItem(option: CommandOptionType): string[] {
     <div>选项：</div>
     <ul>
       <li v-for="(option, index) in command.options" :key="index">
-        {{ getOptionItem(option).join(", ") }}
+        {{ getOptionItem(option).join(" / ") }}
         {{ option.desc }}
-        {{ option.defaultValue ? `${option.defaultValue}` : "" }}
+        {{ option.defaultValue ? `（默认值为${option.defaultValue}）` : "" }}
         {{ option.required ? "（必填）" : "" }}
       </li>
     </ul>

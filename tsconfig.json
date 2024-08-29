@@ -13,7 +13,13 @@
     "skipLibCheck": true,
     "strict": true,
     "noImplicitAny": true,
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "baseUrl": "." /* Specify the base directory to resolve non-relative module names. */,
+    "paths": {
+      "@/*": [
+        "src/*"
+      ] /* Specify a set of entries that re-map imports to additional lookup locations. */
+    }
   },
   "include": [
     "src/**/*.ts",
