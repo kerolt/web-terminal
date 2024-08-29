@@ -1,3 +1,4 @@
+import searchCommand from "@/commands/search/search-cmd";
 import { CommandType } from "./command";
 import backgroundCommand from "./terminal/bg-cmd";
 import clearCommand from "./terminal/clear-cmd";
@@ -12,7 +13,8 @@ const commandList: CommandType[] = [
   shortcutCommand,
   helpCommand,
   backgroundCommand,
-  todoCommand
+  todoCommand,
+  ...searchCommand
 ];
 
 const commandMap: Record<string, CommandType> = {};
