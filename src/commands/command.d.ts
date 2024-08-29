@@ -29,7 +29,7 @@ interface CommandType {
  * 命令参数类型，用于help命令的提示
  */
 interface CommandParamsType {
-  paramName: string; // 参数名
+  key: string; // 参数名
   desc: string; // 描述
   defaultValue?: string | boolean;
   required?: boolean; // 是否必填
@@ -39,7 +39,7 @@ interface CommandParamsType {
  * 命令选项类型
  */
 interface CommandOptionType {
-  name: string; // 选项名，如果是长格式选项，则不用在里面写“--”，例如--list只需要写list
+  key: string; // 选项名，如果是长格式选项，则不用在里面写“--”，例如--list只需要写list
   type: "string" | "boolean";
   desc: string; // 描述
   alias?: string[]; // 命令简写，通常为短格式选项，不用写“-”，例如-s只需要写s

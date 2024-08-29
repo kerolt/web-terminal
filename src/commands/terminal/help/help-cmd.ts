@@ -9,7 +9,7 @@ const helpCommand: CommandType = {
   alias: ["man"],
   params: [
     {
-      paramName: "commandName",
+      key: "commandName",
       desc: "命令参数名称"
     }
   ],

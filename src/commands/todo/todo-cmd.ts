@@ -10,7 +10,7 @@ const todoCommand: CommandType = {
   options: [],
   params: [
     {
-      paramName: "add",
+      key: "add",
       desc: "添加代办事项"
     }
   ],

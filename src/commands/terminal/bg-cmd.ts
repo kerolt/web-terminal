@@ -8,7 +8,7 @@ const backgroundCommand: CommandType = {
   options: [],
   params: [
     {
-      paramName: "url",
+      key: "url",
       desc: "图片地址，可为颜色，不填则使用bing随机壁纸"
     }
   ],

@@ -81,15 +81,15 @@ function parse(text: string, commandOptions: CommandOptionType[]): ParsedOptions
   };
 
   commandOptions.forEach((commandOption) => {
-    const { alias, name, type, defaultValue } = commandOption;
+    const { alias, key, type, defaultValue } = commandOption;
     if (alias && options.alias) {
-      options.alias[name] = alias;
+      options.alias[key] = alias;
     }
     if (defaultValue && options.default) {
-      options.default[name] = defaultValue;
+      options.default[key] = defaultValue;
     }
     // options.string.push or options.boolean.push
-    options[type]?.push(name);
+    options[type]?.push(key);
   });
 
   const parseOptions = getopts(args, options);
