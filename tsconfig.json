@@ -5,7 +5,9 @@
     "module": "esnext",
     "moduleResolution": "node",
     "jsx": "preserve",
-    "sourceMap": true,
+    "sourceMap": false,
+    "allowJs": false, // 禁止编译JS文件
+    "noEmit": true, // 仅进行类型检查，而不输出任何文件
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
@@ -29,6 +31,5 @@
     "env.d.ts",
     "src/**/*",
     "src/**/*.vue"
-  ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  ]
 }
