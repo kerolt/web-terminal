@@ -24,7 +24,7 @@ const wrapperStyle = computed(() => {
   const style = {
     background
   };
-  if (background.startsWith("http")) {
+  if (background.startsWith("http") || background.startsWith("data")) {
     style.background = `url(${background})`;
   } else {
     style.background = background;
@@ -293,6 +293,9 @@ onMounted(() => {
 
 <template>
   <div class="terminal-wrapper" @click="handleClickOnTerminal" :style="wrapperStyle">
+    <div>
+      <input id="upload" type="file" accept="image/*" />
+    </div>
     <div class="terminal" ref="terminalRef">
       <!-- 命令执行结果（可折叠显示） -->
       <div class="collapse-wrapper">
@@ -386,6 +389,18 @@ onMounted(() => {
   position: fixed;
   inset: 0px;
   background: black;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+
+  #upload {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
 
   .terminal {
     position: fixed;

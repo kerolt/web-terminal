@@ -1,6 +1,6 @@
 import searchCommand from "@/commands/search/search-cmd";
 import { CommandType } from "./command";
-import backgroundCommand from "./terminal/bg-cmd";
+import backgroundCommand from "./background/bg-cmd";
 import clearCommand from "./terminal/clear-cmd";
 import helpCommand from "./terminal/help/help-cmd";
 import historyCommand from "./terminal/history-cmd";
