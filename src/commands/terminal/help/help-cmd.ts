@@ -32,7 +32,7 @@ const helpCommand: CommandType = {
     if (
       parentCommand &&
       parentCommand.subCommandsMap &&
-      Object.keys(parentCommand.subCommandsMap).length > 1
+      Object.keys(parentCommand.subCommandsMap).length >= 1
     ) {
       command = parentCommand.subCommandsMap[commandName];
     }
