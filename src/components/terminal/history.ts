@@ -1,18 +1,18 @@
 import { ref, Ref } from "vue";
 import { CommandInputType, CommandOutputType } from "./terminal";
 
-const useHistory = (commandList: CommandOutputType[], inputCommand: Ref<CommandInputType>) => {
-  const commandHistoryPos = ref(commandList.length);
+const useHistory = (commandList: Ref<CommandOutputType[]>, inputCommand: Ref<CommandInputType>) => {
+  const commandHistoryPos = ref(commandList.value.length);
 
   const historyCommandList = () => {
-    return commandList;
+    return commandList.value;
   };
 
   const showNextCommand = () => {
-    if (commandHistoryPos.value < commandList.length - 1) {
+    if (commandHistoryPos.value < commandList.value.length - 1) {
       commandHistoryPos.value++;
-      inputCommand.value.text = commandList[commandHistoryPos.value].text;
-    } else if (commandHistoryPos.value === commandList.length - 1) {
+      inputCommand.value.text = commandList.value[commandHistoryPos.value].text;
+    } else if (commandHistoryPos.value === commandList.value.length - 1) {
       commandHistoryPos.value++;
       inputCommand.value.text = "";
     }
@@ -21,7 +21,7 @@ const useHistory = (commandList: CommandOutputType[], inputCommand: Ref<CommandI
   const showPrevCommand = () => {
     if (commandHistoryPos.value >= 1) {
       commandHistoryPos.value--;
-      inputCommand.value.text = commandList[commandHistoryPos.value].text;
+      inputCommand.value.text = commandList.value[commandHistoryPos.value].text;
     }
   };
 

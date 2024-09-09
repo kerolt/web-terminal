@@ -1,4 +1,5 @@
-import { CommandType } from "../command";
+import { CommandType } from "@/commands/command";
+import clearHistoryCommand from "@/commands/terminal/history/sub/clear-cmd";
 
 const historyCommand: CommandType = {
   cmd: "history",
@@ -7,6 +8,9 @@ const historyCommand: CommandType = {
   desc: "查看历史记录",
   options: [],
   collapsible: true,
+  subCommandsMap: {
+    clean: clearHistoryCommand
+  },
   action: (options, terminal) => {
     const historys = terminal.listCommandHistory();
     historys.forEach((history, index) => {

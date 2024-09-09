@@ -85,6 +85,9 @@ export interface TerminalType {
   toggleAllCollapse: () => void;
   // 设置命令是否可折叠
   setCommandCollapsible: (collapsible: boolean) => void;
+
+  // 清除输入的命令记录
+  clearCommandList(): void;
 }
 
 export interface HintType {

@@ -16,6 +16,7 @@ import { registerShortcuts } from "./shortcut";
 import OutputContent from "./OutputContent.vue";
 import { useConfigStore } from "../../stores/terminal-config";
 import { useTab } from "./hint";
+import { useHistoryStore } from "@/stores/history-store";
 
 const configStore = useConfigStore();
 
@@ -74,10 +75,12 @@ const terminalRef = ref();
  */
 const isRunning = ref(false);
 
+const { getHistoryList, updateHistoryList } = useHistoryStore();
+
 /**
  * 执行的命令列表，可用于上下快捷键选择、查看历史等
  */
-const commandList = ref<CommandOutputType[]>([]);
+const commandList = ref<CommandOutputType[]>(getHistoryList() || []);
 
 /**
  * 输入命令
@@ -93,7 +96,7 @@ const {
   historyCommandList: listCommandHistory,
   showPrevCommand,
   showNextCommand
-} = useHistory(commandList.value, inputCommand);
+} = useHistory(commandList, inputCommand);
 
 /**
  * TODO 提示 hint
@@ -130,17 +133,28 @@ const doSubmitCommand = async () => {
   };
   currentCommandPtr = currentCommand;
 
+  // 输入不为空，则加入commandList，用于设置历史记录等
+  // 先操作输入后执行，避免执行history时又更新历史记录
+  if (inputText) {
+    const index = commandList.value.findIndex((item) => item.text === inputText);
+    // 如果将要执行的命令原本就在history中出现过，那就将原来位置的项删掉，重新添加到末尾，这样避免添加重复的项，增加体验感
+    // 否则直接添加到末尾
+    if (index < 0) {
+      commandList.value.push(currentCommand);
+      commandHistoryPos.value = commandList.value.length;
+    } else {
+      const foundItem = commandList.value.splice(index, 1)[0];
+      commandList.value.push(foundItem);
+    }
+    updateHistoryList(commandList.value);
+  }
+
   // 执行命令，执行完毕后将其加入结果输出列表
   // 在执行器中会将结果写入currentCommandPtr，即写入了currentCommand
   await props.onSubmitCommand?.(inputText);
   outputList.value.push(currentCommand);
   activeKeys.value.push(outputList.value.length - 1);
 
-  // 输入不为空，则加入commandList，用于设置历史记录等
-  if (inputText) {
-    commandList.value.push(currentCommand);
-    commandHistoryPos.value = commandList.value.length;
-  }
   inputCommand.value = {
     text: "",
     placeholder: ""
@@ -264,6 +278,11 @@ const setCommandCollapsible = (collapsible: boolean) => {
   currentCommandPtr.collapsible = collapsible;
 };
 
+function clearCommandList() {
+  commandList.value = [];
+  commandHistoryPos.value = -1;
+}
+
 const terminal: TerminalType = {
   doSubmitCommand,
   clear,
@@ -279,7 +298,8 @@ const terminal: TerminalType = {
   showPrevCommand,
   listCommandHistory,
   toggleAllCollapse,
-  setCommandCollapsible
+  setCommandCollapsible,
+  clearCommandList
 };
 
 defineExpose({
