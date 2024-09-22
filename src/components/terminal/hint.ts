@@ -1,6 +1,7 @@
 import { Ref, ref } from "vue";
 import { CommandInputType, HintType } from "./terminal";
 import { commandMap } from "../../commands/register";
+import { buildDebounce } from "@/utils/debounce";
 
 export function useTab() {
   const hintList = ref<HintType[]>([]);
@@ -63,10 +64,15 @@ export function useTab() {
     hintList.value = [];
   }
 
+  const debounceSetHintList = buildDebounce((input: string) => {
+    setHintList(input);
+  }, 150);
+
   return {
     hintList,
     setInputComand,
     setHintList,
-    clearHintList
+    clearHintList,
+    debounceSetHintList
   };
 }

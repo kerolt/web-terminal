@@ -241,7 +241,7 @@ const isInputFocused = (): boolean => {
   return isFocusInput.value;
 };
 
-const { hintList, setInputComand, setHintList, clearHintList } = useTab();
+const { hintList, setInputComand, debounceSetHintList, clearHintList } = useTab();
 
 const setTabCompletion = () => {
   if (hintList.value.length > 0) {
@@ -249,16 +249,13 @@ const setTabCompletion = () => {
     setInputComand(inputCommand);
   } else {
     // hintList还没有内容时，按下tab会找到与input相匹配的命令
-    setHintList(inputCommand.value.text);
+    // TODO 在使用了防抖后，输入子命令立刻按下tab键可能会造成输入的子命令丢失，但是不使用防抖时没事。在这种情况下，体验感会稍差
+    debounceSetHintList(inputCommand.value.text);
   }
 };
 
 watchEffect(() => {
-  if (inputCommand.value.text.length === 0) {
-    clearHintList();
-  } else {
-    setHintList(inputCommand.value.text);
-  }
+  debounceSetHintList(inputCommand.value.text);
 });
 
 /**
